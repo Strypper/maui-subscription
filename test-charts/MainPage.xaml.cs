@@ -23,6 +23,11 @@ public partial class MainPage : ContentPage
 
         }
     }
+
+    private void ContentPage_Appearing(object sender, EventArgs e)
+    {
+        MainList.SelectedItem = null;
+    }
 }
 
 public partial class AppUsage : ObservableObject
