@@ -48,7 +48,7 @@ public partial class AppUsage : ObservableObject
     decimal price;
 
     [ObservableProperty]
-    string? discount; // "$10.99 (-15$) format
+    string? discount; 
 
     [ObservableProperty]
     string hex;
@@ -61,6 +61,9 @@ public partial class AppUsage : ObservableObject
 
     [ObservableProperty]
     bool isDiscountApplied;
+
+    [ObservableProperty]
+    bool isDiscountAvailable; //isDiscountApplied == true => false, discount is null => false, discount not null && isDiscountApplied == false => true
 }
 
 public class SumPriceConverter : IValueConverter

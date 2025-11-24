@@ -7,13 +7,13 @@
     xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Appearing="ContentPage_Appearing"
-    BackgroundColor="#f7f8fa">
+    BackgroundColor="#000000">
     <ContentPage.Resources>
         <x:Array x:Key="AppUsages" Type="{x:Type local:AppUsage}">
             <local:AppUsage
                 Company="Google"
                 DayLeft="12"
-                Discount="$2.00 (-10%)"
+                Discount="$10.98 (-10%)"
                 Hex="#FF0000"
                 Icon="youtube.png"
                 IsDiscountApplied="True"
@@ -24,7 +24,6 @@
             <local:AppUsage
                 Company="Apple"
                 DayLeft="15"
-                Discount="$1.80 (-10%)"
                 Hex="#FF4E6B"
                 Icon="apple_music.jpg"
                 IsDiscountApplied="False"
@@ -38,7 +37,8 @@
                 Discount="$1.60 (-10%)"
                 Hex="#1ED760"
                 Icon="spotify.png"
-                IsDiscountApplied="True"
+                IsDiscountApplied="False"
+                IsDiscountAvailable="True"
                 IsPaid="True"
                 Price="15.99"
                 Subscription="Spotify"
@@ -201,6 +201,8 @@
         <local:USDToVNDConverter x:Key="USDToVNDConverter" />
         <local:TextDecorationsConverter x:Key="TextDecorationsConverter" />
         <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <toolkit:IsNullConverter x:Key="IsNullConverter" />
+        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
 
     </ContentPage.Resources>
 
@@ -215,10 +217,11 @@
                 <Border
                     Grid.Row="1"
                     Padding="16"
-                    BackgroundColor="#ffffff"
+                    BackgroundColor="#171717"
                     MaximumHeightRequest="800"
+                    Stroke="#fafafa"
                     StrokeShape="RoundRectangle 8"
-                    StrokeThickness="0">
+                    StrokeThickness="0.5">
                     <VerticalStackLayout Spacing="8">
 
                         <Label
@@ -226,6 +229,7 @@
                             FontSize="Subtitle"
                             HorizontalOptions="Center"
                             Text="NOVEMBER"
+                            TextColor="White"
                             TextDecorations="Underline" />
                         <syncfusionToolkit:SfCircularChart>
                             <syncfusionToolkit:PieSeries
@@ -245,25 +249,31 @@
                                             <Label
                                                 FontSize="10"
                                                 Text="{Binding Item.Subscription}"
-                                                TextColor="Black" />
+                                                TextColor="#fafafa" />
                                             <Label
                                                 FontSize="10"
                                                 Text=" : "
-                                                TextColor="Black" />
+                                                TextColor="#fafafa" />
                                             <Label
                                                 FontSize="10"
                                                 Text="{Binding Item.Price, StringFormat='{0:C}'}"
-                                                TextColor="Black" />
+                                                TextColor="#fafafa" />
                                         </HorizontalStackLayout>
                                     </DataTemplate>
                                 </syncfusionToolkit:PieSeries.LabelTemplate>
+
+
 
                                 <syncfusionToolkit:PieSeries.DataLabelSettings>
                                     <syncfusionToolkit:CircularDataLabelSettings LabelPosition="Inside" SmartLabelAlignment="Shift" />
                                 </syncfusionToolkit:PieSeries.DataLabelSettings>
                             </syncfusionToolkit:PieSeries>
                             <syncfusionToolkit:SfCircularChart.Legend>
-                                <syncfusionToolkit:ChartLegend />
+                                <syncfusionToolkit:ChartLegend>
+                                    <syncfusionToolkit:ChartLegend.LabelStyle>
+                                        <syncfusionToolkit:ChartLegendLabelStyle TextColor="White" />
+                                    </syncfusionToolkit:ChartLegend.LabelStyle>
+                                </syncfusionToolkit:ChartLegend>
                             </syncfusionToolkit:SfCircularChart.Legend>
                         </syncfusionToolkit:SfCircularChart>
                         <Label HorizontalOptions="Center">
@@ -272,11 +282,11 @@
                                     <Span
                                         FontAttributes="Bold"
                                         Text="{Binding Source={StaticResource AppUsages}, Converter={StaticResource SumPriceConverter}, StringFormat='Total: {0:C}'}"
-                                        TextColor="Black" />
-                                    <Span Text=" - " TextColor="Black" />
+                                        TextColor="#fafafa" />
+                                    <Span Text=" - " TextColor="#fafafa" />
                                     <Span
                                         Text="{Binding Source={StaticResource AppUsages}, Converter={StaticResource USDToVNDConverter}}"
-                                        TextColor="Black"
+                                        TextColor="#fafafa"
                                         TextDecorations="Underline" />
                                 </FormattedString>
                             </Label.FormattedText>
@@ -294,9 +304,10 @@
                 <DataTemplate>
                     <Border
                         Padding="16"
-                        BackgroundColor="#ffffff"
+                        BackgroundColor="#171717"
+                        Stroke="#fafafa"
                         StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0">
+                        StrokeThickness="0.5">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -313,7 +324,7 @@
                                 <BoxView
                                     BackgroundColor="{Binding Hex}"
                                     CornerRadius="2"
-                                    HeightRequest="12"
+                                    HeightRequest="6"
                                     WidthRequest="86" />
                             </VerticalStackLayout>
                             <VerticalStackLayout
@@ -325,10 +336,12 @@
                                     FontAttributes="Bold"
                                     FontSize="14"
                                     Text="{Binding Company}"
+                                    TextColor="#fafafa"
                                     VerticalOptions="Center" />
                                 <Label
                                     FontSize="12"
                                     Text="{Binding Subscription}"
+                                    TextColor="#fafafa"
                                     VerticalOptions="Center" />
                             </VerticalStackLayout>
                             <Grid Grid.Column="2">
@@ -337,59 +350,63 @@
                                     FontSize="14"
                                     HorizontalOptions="End"
                                     Text="{Binding Price, StringFormat='{0:C}'}"
+                                    TextColor="#fafafa"
                                     TextDecorations="{Binding IsDiscountApplied, Converter={StaticResource TextDecorationsConverter}}" />
 
                                 <Label
                                     HorizontalOptions="End"
                                     Text="{Binding Discount}"
+                                    TextColor="#fafafa"
                                     VerticalOptions="Center" />
 
                                 <HorizontalStackLayout Spacing="8" VerticalOptions="End">
 
                                     <Border
                                         Padding="4,2,4,2"
-                                        BackgroundColor="#fff7ed"
+                                        BackgroundColor="#292929"
                                         IsVisible="{Binding IsDiscountApplied}"
-                                        Stroke="#a87b4d"
+                                        Stroke="#292929"
                                         StrokeShape="RoundRectangle 4">
                                         <Label
                                             FontSize="11"
                                             Text="Discount applied"
-                                            TextColor="#a87b4d"
+                                            TextColor="#fafafa"
                                             VerticalOptions="Center" />
                                     </Border>
 
                                     <Border
                                         Padding="4,2,4,2"
-                                        BackgroundColor="#4169e1"
-                                        IsVisible="{Binding IsDiscountApplied, Converter={StaticResource InvertedBoolConverter}}"
-                                        Stroke="White"
+                                        BackgroundColor="#292929"
+                                        IsVisible="{Binding IsDiscountAvailable}"
+                                        Stroke="#292929"
                                         StrokeShape="RoundRectangle 4">
                                         <Label
                                             FontSize="11"
                                             Text="Discount available"
-                                            TextColor="White"
+                                            TextColor="#fafafa"
                                             VerticalOptions="Center" />
                                     </Border>
 
                                     <Border
                                         Padding="4,2,4,2"
-                                        BackgroundColor="#f0fdf4"
+                                        BackgroundColor="#292929"
                                         IsVisible="{Binding IsPaid}"
+                                        Stroke="#292929"
                                         StrokeShape="RoundRectangle 4">
                                         <Label
                                             FontSize="11"
                                             Text="Paid"
-                                            TextColor="#278236"
+                                            TextColor="#fafafa"
                                             VerticalOptions="Center" />
                                     </Border>
 
                                     <Border
                                         Padding="4,2,4,2"
-                                        BackgroundColor="#e0e5eb"
+                                        BackgroundColor="#292929"
+                                        Stroke="#292929"
                                         StrokeShape="RoundRectangle 4">
 
-                                        <Label FontSize="11">
+                                        <Label FontSize="11" TextColor="#fafafa">
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="{Binding DayLeft}" />
