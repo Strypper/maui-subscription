@@ -3,11 +3,201 @@
     x:Class="test_charts.DetailPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="DetailPage">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    xmlns:local="clr-namespace:test_charts"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:zoft="http://zoft.MauiExtensions/Controls"
+    Title="{x:Binding Title}"
+    x:DataType="local:DetailViewModel"
+    BackgroundColor="#000000">
+    <ScrollView Padding="16">
+        <VerticalStackLayout Spacing="16">
+            <Border
+                Padding="16"
+                BackgroundColor="#171717"
+                Stroke="#fafafa"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0.5">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Subtitle"
+                        Text="Provider:"
+                        TextColor="#fafafa" />
+                    <Label
+                        FontSize="Small"
+                        Text="Company name (YouTube, Apple Music, Spotify, etc.):"
+                        TextColor="#fafafa" />
+                    <syncfusionToolkit:SfPicker
+                        Mode="RelativeDialog"
+                        RelativePosition="AlignTopLeft"
+                        RelativeView="{x:Reference ProviderPickerButton}" />
+                    <syncfusionToolkit:SfButton
+                        x:Name="ProviderPickerButton"
+                        Background="#525252"
+                        CornerRadius="4"
+                        HorizontalOptions="Fill"
+                        Text="Provider" />
+                    <syncfusionToolkit:SfTextInputLayout
+                        ContainerType="Outlined"
+                        FocusedStrokeThickness="0.5"
+                        InputViewPadding="14,0,0,0"
+                        OutlineCornerRadius="4"
+                        ReserveSpaceForAssistiveLabels="False"
+                        Stroke="White">
+                        <Entry
+                            Placeholder="Other provider..."
+                            PlaceholderColor="White"
+                            TextColor="White" />
+                    </syncfusionToolkit:SfTextInputLayout>
+                </VerticalStackLayout>
+            </Border>
+            <Border
+                Padding="16"
+                BackgroundColor="#171717"
+                Stroke="#fafafa"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0.5">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Subtitle"
+                        Text="Subscription:"
+                        TextColor="#fafafa" />
+                    <Label
+                        FontSize="Small"
+                        Text="YouTube Premium, Spotify Family"
+                        TextColor="#fafafa" />
+                    <syncfusionToolkit:SfPicker
+                        Mode="RelativeDialog"
+                        RelativePosition="AlignTopLeft"
+                        RelativeView="{x:Reference SubscriptionPickerButton}" />
+                    <syncfusionToolkit:SfButton
+                        x:Name="SubscriptionPickerButton"
+                        Background="#525252"
+                        CornerRadius="4"
+                        HorizontalOptions="Fill"
+                        Text="Subscription" />
+                    <syncfusionToolkit:SfTextInputLayout
+                        ContainerType="Outlined"
+                        FocusedStrokeThickness="0.5"
+                        InputViewPadding="14,0,0,4"
+                        OutlineCornerRadius="4"
+                        ReserveSpaceForAssistiveLabels="False"
+                        Stroke="White">
+                        <zoft:AutoCompleteEntry
+                            BackgroundColor="Transparent"
+                            DisplayMemberPath="Name"
+                            HeightRequest="44"
+                            ItemsSource="{x:Binding FilteredSubscriptions}"
+                            Placeholder="YouTube Premium, Amazon Prime Plus, etc.."
+                            PlaceholderColor="LightGray"
+                            SelectedSuggestion="{x:Binding SelectedSubscription}"
+                            TextChangedCommand="{x:Binding TextChangedCommand}"
+                            TextColor="White"
+                            TextMemberPath="Name" />
+                    </syncfusionToolkit:SfTextInputLayout>
+                </VerticalStackLayout>
+            </Border>
+            <Border
+                Padding="16"
+                BackgroundColor="#171717"
+                Stroke="#fafafa"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0.5">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Subtitle"
+                        Text="Color:"
+                        TextColor="#fafafa" />
+
+                    <!--  Chọn màu custom  -->
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            BackgroundColor="Red"
+                            HeightRequest="45"
+                            WidthRequest="45" />
+                        <syncfusionToolkit:SfTextInputLayout
+                            Grid.Column="1"
+                            ContainerType="Outlined"
+                            FocusedStrokeThickness="0.5"
+                            InputViewPadding="14,0,0,0"
+                            OutlineCornerRadius="4"
+                            ReserveSpaceForAssistiveLabels="False"
+                            Stroke="White">
+                            <Entry
+                                Placeholder="Other provider..."
+                                PlaceholderColor="White"
+                                Text="{x:Binding SelectedColor,
+                                                 Mode=TwoWay}"
+                                TextColor="White" />
+                        </syncfusionToolkit:SfTextInputLayout>
+                    </Grid>
+
+                    <!--  Pallate có sẵn  -->
+                    <CollectionView
+                        ItemsSource="{x:Binding Colors}"
+                        SelectedItem="{x:Binding SelectedColor,
+                                                 Mode=TwoWay}"
+                        SelectionMode="Single">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout
+                                HorizontalItemSpacing="16"
+                                Orientation="Vertical"
+                                Span="6"
+                                VerticalItemSpacing="16" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Border
+                                    Margin="4"
+                                    BackgroundColor="{x:Binding .}"
+                                    HeightRequest="45"
+                                    StrokeShape="RoundRectangle 8"
+                                    WidthRequest="45" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.Footer>
+                            <Label Text="Chose a color for better regconiztion" TextColor="White" />
+                        </CollectionView.Footer>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+
+
+            <Border
+                Padding="16"
+                BackgroundColor="#171717"
+                Stroke="#fafafa"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0.5">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Subtitle"
+                        Text="Price:"
+                        TextColor="#fafafa" />
+
+                    <syncfusionToolkit:SfTextInputLayout
+                        Grid.Column="1"
+                        ContainerType="Outlined"
+                        FocusedStrokeThickness="0.5"
+                        InputViewPadding="14,0,0,0"
+                        OutlineCornerRadius="4"
+                        ReserveSpaceForAssistiveLabels="False"
+                        Stroke="White">
+                        <Entry
+                            Placeholder="Money"
+                            PlaceholderColor="White"
+                            TextColor="White" />
+                    </syncfusionToolkit:SfTextInputLayout>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
+using zoft.MauiExtensions.Controls;
 
 namespace test_charts
 {
@@ -13,6 +14,7 @@ namespace test_charts
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionToolkit()
+                .UseZoftAutoCompleteEntry()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -22,7 +24,8 @@ namespace test_charts
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddTransient<DetailPage>();
+            builder.Services.AddTransient<DetailViewModel>();
             return builder.Build();
         }
     }

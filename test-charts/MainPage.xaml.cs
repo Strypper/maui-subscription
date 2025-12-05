@@ -19,7 +19,7 @@ public partial class MainPage : ContentPage
         var appUsage = e.CurrentSelection.FirstOrDefault() as AppUsage;
         if (appUsage != null)
         {
-            Navigation.PushAsync(new DetailPage());
+            Shell.Current.GoToAsync("DetailPage");
 
         }
     }
