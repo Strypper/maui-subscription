@@ -6,9 +6,85 @@ namespace test_charts;
 
 public partial class DetailViewModel : ObservableObject
 {
+    #region [ Company ]
+
     [ObservableProperty]
-    string title = "Hello Thien";
+    string section1Title = "Company";
+
+    [ObservableProperty]
+    string companySearchText = "Google, Apple, Microsoft";
+
+    [ObservableProperty]
+    string companyValue = string.Empty;
+
+    private readonly List<Provider> companies = new()
+    {
+        new() {
+                Id = Guid.Parse("D3B2F1E4-5C6A-4B8D-9A2F-1B2C3D4E5F6A"),
+                Name = "Google",
+                Subscriptions = new List<Subscription>
+                {
+                    new() { Id = Guid.NewGuid(), Name = "Google One" },
+                    new() { Id = Guid.NewGuid(), Name = "YouTube Premium" },
+                    new() { Id = Guid.NewGuid(), Name = "Google Workspace" },
+                }
+              },
+        new() {
+                Id = Guid.Parse("D3B2F1E4-5C6A-4B8D-9A2F-1B2C3D4E5F6B"),
+                Name = "Apple",
+                Subscriptions = new List<Subscription>
+                {
+                    new() { Id = Guid.NewGuid(), Name = "Apple Music" },
+                    new() { Id = Guid.NewGuid(), Name = "Apple TV+" },
+                    new() { Id = Guid.NewGuid(), Name = "iCloud" },
+                }
+              },
+        new() {
+                Id = Guid.Parse("D3B2F1E4-5C6A-4B8D-9A2F-1B2C3D4E5F6C"),
+                Name = "Microsoft",
+                Subscriptions = new List<Subscription>
+                {
+                    new() { Id = Guid.NewGuid(), Name = "Microsoft 365" },
+                    new() { Id = Guid.NewGuid(), Name = "Xbox Game Pass" },
+                    new() { Id = Guid.NewGuid(), Name = "OneDrive" },
+                }
+               },
+        // ... more items
+    };
+
+    [ObservableProperty]
+    private ObservableCollection<Provider> filteredCompanies;
+
+    [ObservableProperty]
+    private Provider selectedCompany;
+
+    partial void OnSelectedCompanyChanged(Provider value)
+    {
+        SubscriptionValue = string.Empty;
+        FilteredSubscriptions = new(value.Subscriptions);
+    }
+
+    [RelayCommand]
+    private void CompanyTextChanged(string text)
+    {
+        FilteredCompanies.Clear();
+        var filtered = companies.Where(item =>
+            item.Name.Contains(text, StringComparison.OrdinalIgnoreCase));
+        foreach (var item in filtered)
+            FilteredCompanies.Add(item);
+    }
+    #endregion
+
     #region [ Subscriptions ]
+
+    [ObservableProperty]
+    string section2Title = "Subscription Plan";
+
+    [ObservableProperty]
+    string subscriptionSearchText = "YouTube Premium, Spotify Family";
+
+    [ObservableProperty]
+    string subscriptionValue = string.Empty;
 
     private readonly List<Subscription> subscriptions = new()
     {
@@ -24,23 +100,21 @@ public partial class DetailViewModel : ObservableObject
     [ObservableProperty]
     private Subscription selectedSubscription;
 
-    [ObservableProperty]
-    private int cursorPosition;
-
     [RelayCommand]
-    private void TextChanged(string text)
+    private void SubscriptionTextChanged(string text)
     {
         FilteredSubscriptions.Clear();
-
         var filtered = subscriptions.Where(item =>
             item.Name.Contains(text, StringComparison.OrdinalIgnoreCase));
-
         foreach (var item in filtered)
             FilteredSubscriptions.Add(item);
     }
     #endregion
 
     #region [ Colors ]
+
+    [ObservableProperty]
+    string section3Title = "Color";
 
     private readonly List<string> quickColors = new()
     {
@@ -73,15 +147,37 @@ public partial class DetailViewModel : ObservableObject
 
     partial void OnSelectedColorChanged(string value)
     {
-        
+
     }
+    #endregion
+
+    #region [ Price ]
+
+    [ObservableProperty]
+    string section4Title = "Price (VND)";
+
+    [ObservableProperty]
+    private decimal price;
+    #endregion
+
+    #region [ Next Renewable Date ]
+
+    [ObservableProperty]
+    string section5Title = "Next Renewal Date";
+
+    [ObservableProperty]
+    bool isRecursiveBill = false;
+
+    [ObservableProperty]
+    DateTime nextRenewalSelectedDate = DateTime.Now;
     #endregion
 
 
     public DetailViewModel()
     {
-        Colors = new(quickColors);
+        FilteredCompanies = new(companies);
         FilteredSubscriptions = new(subscriptions);
+        Colors = new(quickColors);
     }
 }
 
@@ -89,6 +185,7 @@ public class Provider
 {
     public Guid? Id { get; set; }
     public string Name { get; set; }
+    public ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }
 
 public class Subscription
